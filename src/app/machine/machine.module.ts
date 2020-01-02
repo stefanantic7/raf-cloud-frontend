@@ -8,7 +8,7 @@ import {
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
-  MatInputModule, MatNativeDateModule, MatSelectModule
+  MatInputModule, MatMenuModule, MatNativeDateModule, MatSelectModule
 } from '@angular/material';
 import { NewMachineComponent } from './new-machine/new-machine.component';
 import { MachinesComponent } from './machines/machines.component';
@@ -37,7 +37,8 @@ const routes: Routes = [
     MatExpansionModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatMenuModule
   ],
   entryComponents: [NewMachineComponent]
 })
