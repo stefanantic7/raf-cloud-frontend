@@ -1,0 +1,12 @@
+.nav-content {
+  display: flex;
+  width: 100%;
+
+  a {
+    color: #eaf2fb;
+    &.active {
+      opacity: 0.7;
+    }
+  }
+
+}

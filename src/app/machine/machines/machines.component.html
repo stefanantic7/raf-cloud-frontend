@@ -1,0 +1,87 @@
+<div class="grid-container">
+  <div>
+
+    <mat-accordion class="example-headers-align">
+      <mat-expansion-panel [expanded]="false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Advanced search
+          </mat-panel-title>
+          <mat-panel-description>
+            Search by name, status and date
+            <mat-icon>search</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-form-field>
+          <input matInput placeholder="Search by name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Favorite food</mat-label>
+          <mat-select>
+            <mat-option [value]="'RUNNING'">
+              RUNNING
+            </mat-option>
+            <mat-option [value]="'STOPPED'">
+              STOPPED
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="dateFrom" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
+          <mat-datepicker #dateFrom></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="dateTo" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
+          <mat-datepicker #dateTo></mat-datepicker>
+        </mat-form-field>
+
+        <mat-action-row>
+          <button mat-button color="primary" (click)="search()">Search</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+  </div>
+  <mat-grid-list cols="3" rowHeight="150px">
+    <mat-grid-tile  [colspan]="1" [rowspan]="1">
+
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Shiba Inu
+          </mat-card-title>
+          <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+
+          <button mat-button>Start</button>
+        </mat-card-actions>
+      </mat-card>
+
+    </mat-grid-tile>
+
+
+    <mat-grid-tile  [colspan]="1" [rowspan]="1">
+
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title class="blur_effect">
+            New Machine Name
+          </mat-card-title>
+          <mat-card-subtitle class="blur_effect">Machine description</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="openNewMachineModal()">Create new</button>
+        </mat-card-actions>
+      </mat-card>
+
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
