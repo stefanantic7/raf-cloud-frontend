@@ -1,18 +1,92 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {NewMachineComponent} from '../new-machine/new-machine.component';
+import {HttpClient} from '@angular/common/http';
+import {MachineService} from '../../core/services/machine.service';
+import {Machine} from '../../core/models/machine';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-machines',
   templateUrl: './machines.component.html',
-  styleUrls: ['./machines.component.scss']
+  styleUrls: ['./machines.component.scss'],
+  providers: [DatePipe]
 })
 export class MachinesComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) {
+  private machines: Machine[];
+
+  private searchForm = {
+    name: null,
+    status: null,
+    dateFrom: null,
+    dateTo: null
+  };
+
+  constructor(public dialog: MatDialog,
+              private machineService: MachineService,
+              private datePipe: DatePipe) {
   }
 
   ngOnInit() {
+    this.get();
+  }
+
+  resetSearch() {
+    this.searchForm = {
+      name: null,
+      status: null,
+      dateFrom: null,
+      dateTo: null
+    };
+  }
+
+  get() {
+    let searchForm = {};
+
+    for(var key in this.searchForm){
+      if(this.searchForm[key] == null) {
+        continue
+      }
+      searchForm[key] = this.searchForm[key];
+      if(searchForm[key] instanceof Date) {
+        searchForm[key] = this.datePipe.transform(searchForm[key], 'yyyy-MM-dd');
+      }
+    }
+    this.machineService.get(searchForm)
+      .subscribe(
+        machines => this.machines = machines,
+        err => console.log(err)
+      );
+  }
+
+  delete(machine: Machine) {
+    this.machineService.delete(machine).subscribe(
+      res => this.get(),
+      err => console.log(err)
+    );
+  }
+
+  start(machine: Machine) {
+    this.machineService.start(machine).subscribe(
+      res => this.get(),
+      err => console.log(err)
+    );
+  }
+
+  stop(machine: Machine) {
+    this.machineService.stop(machine).subscribe(
+      res => this.get(),
+      err => console.log(err)
+    );
+  }
+
+  restart(machine: Machine) {
+    this.machineService.restart(machine).subscribe(
+      res => this.get(),
+      err => console.log(err)
+    );
   }
 
   openNewMachineModal() {
@@ -21,7 +95,7 @@ export class MachinesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.get();
     });
   }
 }

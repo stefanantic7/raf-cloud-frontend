@@ -1,0 +1,22 @@
+import { Injectable } from '@angular/core';
+import {AuthService} from './auth.service';
+import {CanActivate, CanLoad, Router} from '@angular/router';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthGuardService implements CanLoad {
+
+  constructor(public authService: AuthService, public router: Router) {
+  }
+
+  canLoad(): boolean {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate([ this.authService.getLoginUrl() ]);
+
+      return false;
+    }
+
+    return true;
+  }
+}

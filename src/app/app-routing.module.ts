@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import {AuthGuardService} from './core/services/auth-guard.service';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {TokenInterceptor} from './core/interceptors/token.interceptor';
 
 
 const routes: Routes = [
   {
     path: 'machines',
-    loadChildren: './machine/machine.module#MachineModule'
+    loadChildren: './machine/machine.module#MachineModule',
+    canLoad: [AuthGuardService]
   },
   {
     path: 'auth',
@@ -15,6 +19,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }

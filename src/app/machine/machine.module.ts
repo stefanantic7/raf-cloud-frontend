@@ -12,7 +12,10 @@ import {
 } from '@angular/material';
 import { NewMachineComponent } from './new-machine/new-machine.component';
 import { MachinesComponent } from './machines/machines.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AuthGuardService} from '../core/services/auth-guard.service';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {TokenInterceptor} from '../core/interceptors/token.interceptor';
 
 const routes: Routes = [
   {
@@ -38,8 +41,12 @@ const routes: Routes = [
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatMenuModule
+    MatMenuModule,
+    ReactiveFormsModule
   ],
-  entryComponents: [NewMachineComponent]
+  entryComponents: [NewMachineComponent],
+  providers: [
+
+  ],
 })
 export class MachineModule { }

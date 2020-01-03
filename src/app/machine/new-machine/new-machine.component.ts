@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {MachineService} from '../../core/services/machine.service';
 
 @Component({
   selector: 'app-new-machine',
@@ -11,7 +12,8 @@ export class NewMachineComponent implements OnInit {
   private name: string;
 
   constructor(public dialogRef: MatDialogRef<NewMachineComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private machineService: MachineService) {
   }
 
   ngOnInit() {
@@ -19,7 +21,10 @@ export class NewMachineComponent implements OnInit {
 
   createMachine(): void {
     console.log(this.name);
-    this.dialogRef.close();
+    this.machineService.create(this.name).subscribe(
+      res => this.dialogRef.close(),
+      err => console.error(err)
+    );
   }
 
   cancel(): void {

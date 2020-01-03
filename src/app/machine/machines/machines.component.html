@@ -1,6 +1,6 @@
 <div class="grid-container">
-  <div>
 
+  <form class="example-form" (ngSubmit)="get()">
     <mat-accordion class="example-headers-align">
       <mat-expansion-panel [expanded]="false">
         <mat-expansion-panel-header>
@@ -14,63 +14,85 @@
         </mat-expansion-panel-header>
 
         <mat-form-field>
-          <input matInput placeholder="Search by name">
+          <input matInput placeholder="Search by name" name="ime" [(ngModel)]="searchForm.name">
         </mat-form-field>
 
         <mat-form-field>
-          <mat-label>Favorite food</mat-label>
-          <mat-select>
+          <mat-label>Search by status</mat-label>
+          <mat-select [(ngModel)]="searchForm.status" name="status">
+            <mat-option [value]="''">
+              ALL
+            </mat-option>
             <mat-option [value]="'RUNNING'">
               RUNNING
             </mat-option>
             <mat-option [value]="'STOPPED'">
               STOPPED
             </mat-option>
+            <mat-option [value]="'STARTING'">
+              STARTING
+            </mat-option>
+            <mat-option [value]="'STOPPING'">
+              STOPPING
+            </mat-option>
+            <mat-option [value]="'RESTARTING'">
+              RESTARTING
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput [matDatepicker]="dateFrom" placeholder="Choose a date">
+          <input matInput name="dateFrom" [(ngModel)]="searchForm.dateFrom" [matDatepicker]="dateFrom" placeholder="Choose a date">
           <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
           <mat-datepicker #dateFrom></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput [matDatepicker]="dateTo" placeholder="Choose a date">
+          <input matInput name="dateTo" [(ngModel)]="searchForm.dateTo" [matDatepicker]="dateTo" placeholder="Choose a date">
           <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
           <mat-datepicker #dateTo></mat-datepicker>
         </mat-form-field>
 
         <mat-action-row>
-          <button mat-button color="primary" (click)="search()">Search</button>
+          <button mat-button type="button" (click)="resetSearch()">Reset</button>
+          <button mat-button color="primary">Search</button>
         </mat-action-row>
       </mat-expansion-panel>
 
     </mat-accordion>
+  </form>
 
-  </div>
-  <mat-grid-list cols="3" rowHeight="150px">
-    <mat-grid-tile  [colspan]="1" [rowspan]="1">
+  <mat-grid-list cols="3" rowHeight="200px">
+    <mat-grid-tile  [colspan]="1" [rowspan]="1"  *ngFor="let machine of machines">
 
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
-            Shiba Inu
+            {{ machine.name }}
 
             <div class="post-buttons">
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Remove</button>
+                <button mat-menu-item (click)="delete(machine)">Remove</button>
               </mat-menu>
             </div>
           </mat-card-title>
-          <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+          <mat-card-subtitle>{{ machine.status }}</mat-card-subtitle>
         </mat-card-header>
+        <mat-card-content>
+          <p class="mat-card-header-text">Created: {{ machine.createdAt | date}}</p>
+        </mat-card-content>
         <mat-card-actions>
 
-          <button mat-button>Start</button>
+          <button mat-button *ngIf="machine.status == 'STOPPED'" (click)="start(machine)">Start</button>
+          <button mat-button *ngIf="machine.status == 'RUNNING'" (click)="stop(machine)">Stop</button>
+          <button mat-button *ngIf="machine.status == 'RUNNING'" (click)="restart(machine)">RESTART</button>
+
+          <button mat-button *ngIf="machine.status == 'STARTING' || machine.status == 'RESTARTING'" disabled>Stop</button>
+          <button mat-button *ngIf="machine.status == 'STOPPING'" disabled>Start</button>
+
         </mat-card-actions>
       </mat-card>
 
@@ -86,6 +108,9 @@
           </mat-card-title>
           <mat-card-subtitle class="blur_effect">Machine description</mat-card-subtitle>
         </mat-card-header>
+        <mat-card-content class="blur_effect">
+          <p class="mat-card-header-text">Created: Jan 01, 2019</p>
+        </mat-card-content>
         <mat-card-actions>
           <button mat-button color="primary" (click)="openNewMachineModal()">Create new</button>
         </mat-card-actions>
