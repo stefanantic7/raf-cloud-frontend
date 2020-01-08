@@ -19,7 +19,7 @@
 
         <mat-form-field>
           <mat-label>Search by status</mat-label>
-          <mat-select [(ngModel)]="searchForm.status" name="status">
+          <mat-select [(ngModel)]="searchForm.status" name="status" multiple>
             <mat-option [value]="''">
               ALL
             </mat-option>
@@ -70,7 +70,7 @@
           <mat-card-title>
             {{ machine.name }}
 
-            <div class="post-buttons">
+            <div class="post-buttons" *ngIf="machine.status == 'STOPPED'">
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
