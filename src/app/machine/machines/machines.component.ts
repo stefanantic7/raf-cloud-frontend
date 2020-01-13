@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {NewMachineComponent} from '../new-machine/new-machine.component';
 import {HttpClient} from '@angular/common/http';
@@ -6,6 +6,7 @@ import {MachineService} from '../../core/services/machine.service';
 import {Machine} from '../../core/models/machine';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DatePipe} from '@angular/common';
+import {$t} from 'codelyzer/angular/styles/chars';
 
 @Component({
   selector: 'app-machines',
@@ -13,7 +14,7 @@ import {DatePipe} from '@angular/common';
   styleUrls: ['./machines.component.scss'],
   providers: [DatePipe]
 })
-export class MachinesComponent implements OnInit {
+export class MachinesComponent implements OnInit, OnDestroy {
 
   private machines: Machine[];
 
@@ -24,6 +25,8 @@ export class MachinesComponent implements OnInit {
     dateTo: null
   };
 
+  private timer;
+
   constructor(public dialog: MatDialog,
               private machineService: MachineService,
               private datePipe: DatePipe) {
@@ -31,6 +34,14 @@ export class MachinesComponent implements OnInit {
 
   ngOnInit() {
     this.get();
+
+    this.timer = setInterval(() => {
+      this.get();
+    }, 1*1000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timer);
   }
 
   resetSearch() {
@@ -45,9 +56,9 @@ export class MachinesComponent implements OnInit {
   get() {
     let searchForm = {};
 
-    for(var key in this.searchForm){
+    for(let key in this.searchForm){
       if(this.searchForm[key] == null) {
-        continue
+        continue;
       }
       searchForm[key] = this.searchForm[key];
       if(searchForm[key] instanceof Date) {
